@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorBlog.Server", "BlazorBlog.Server\BlazorBlog.Server.csproj", "{041CBE21-4774-4226-88D2-A837013ED41C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorBlog.Client", "BlazorBlog.Client\BlazorBlog.Client.csproj", "{E08484A7-E65A-4355-9055-F58E1AAD59E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorBlog.Shared", "BlazorBlog.Shared\BlazorBlog.Shared.csproj", "{1CC3A253-2843-46E7-A893-174DAD280687}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{041CBE21-4774-4226-88D2-A837013ED41C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{041CBE21-4774-4226-88D2-A837013ED41C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{041CBE21-4774-4226-88D2-A837013ED41C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{041CBE21-4774-4226-88D2-A837013ED41C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E08484A7-E65A-4355-9055-F58E1AAD59E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E08484A7-E65A-4355-9055-F58E1AAD59E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E08484A7-E65A-4355-9055-F58E1AAD59E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E08484A7-E65A-4355-9055-F58E1AAD59E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CC3A253-2843-46E7-A893-174DAD280687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CC3A253-2843-46E7-A893-174DAD280687}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CC3A253-2843-46E7-A893-174DAD280687}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CC3A253-2843-46E7-A893-174DAD280687}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

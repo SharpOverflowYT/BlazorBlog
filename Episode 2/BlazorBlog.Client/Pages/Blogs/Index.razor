@@ -1,0 +1,40 @@
+﻿@using BlazorBlog.Shared.Blogs
+@attribute [Route(Routes.Pages.Blogs.Index)]
+<h3>Index</h3>
+
+@if (_blogs == null)
+{
+    <div>Loading...</div>
+}
+else
+{
+    <table>
+        <thead>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Description</th>
+        </thead>
+        <tbody>
+        @foreach (var blog in _blogs)
+        {
+            <tr>
+                <td>@blog.Id</td>
+                <td>@blog.Title</td>
+                <td>@blog.Description</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<BlogDto>? _blogs;
+
+    [Inject] public HttpClient HttpClient { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _blogs = await HttpClient.GetFromJsonAsync<List<BlogDto>>(Routes.Api.Blogs.GetAll);
+    }
+    
+}
