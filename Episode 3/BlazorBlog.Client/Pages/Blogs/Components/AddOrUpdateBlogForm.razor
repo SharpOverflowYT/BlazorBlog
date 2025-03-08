@@ -1,0 +1,55 @@
+﻿@using BlazorBlog.Shared.Blogs.Commands
+<EditForm Model="@Command" OnValidSubmit="@OnValidSubmitAsync">
+    <FluentValidationValidator/>
+    
+    <div class="row mb-3">
+        <div class="col-12">
+            <label>
+                Title:
+                <InputText class="form-control" @bind-Value="Command.Title"/>
+            </label>
+            
+            <ValidationMessage For="() => Command.Title"/>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12">
+            <label>
+                Description:
+                <InputTextArea class="form-control" @bind-Value="Command.Description"/>
+            </label>
+
+            <ValidationMessage For="() => Command.Description"/>
+        </div>
+    </div>
+    
+    <div class="d-flex align-items-center gap-1">
+        <button class="btn btn-primary" type="submit">Submit</button>
+        <a class="btn btn-outline-primary" href="@Routes.Pages.Blogs.Index">Cancel</a>
+    </div>
+</EditForm>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public AddOrUpdateBlogCommand Command { get; set; } = null!;
+    private bool IsEditingExistingBlog => Command.Id != null;
+
+    [Inject] public HttpClient HttpClient { get; set; } = null!;
+    [Inject] public NavigationManager NavigationManager { get; set; } = null!;
+    
+    private async Task OnValidSubmitAsync()
+    {
+        HttpResponseMessage response;
+        
+        if (IsEditingExistingBlog)
+            response = await HttpClient.PutAsJsonAsync(Routes.Api.Blogs.Update, Command);
+        else
+            response = await HttpClient.PostAsJsonAsync(Routes.Api.Blogs.Add, Command);
+
+        if (response.IsSuccessStatusCode)
+            NavigationManager.NavigateTo(Routes.Pages.Blogs.Index);
+    }
+
+}

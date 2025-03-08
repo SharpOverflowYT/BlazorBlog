@@ -1,0 +1,8 @@
+﻿@using BlazorBlog.Client.Pages.Blogs.Components
+@using BlazorBlog.Shared.Blogs.Commands
+@attribute [Route(Routes.Pages.Blogs.Add)]
+<PageTitle>Add Blog</PageTitle>
+
+<h3>Add Blog</h3>
+
+<AddOrUpdateBlogForm Command="new AddOrUpdateBlogCommand()"/>
