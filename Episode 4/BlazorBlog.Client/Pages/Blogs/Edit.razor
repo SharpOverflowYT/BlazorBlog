@@ -1,0 +1,36 @@
+﻿@using BlazorBlog.Client.Extensions
+@using BlazorBlog.Client.Pages.Blogs.Components
+@using BlazorBlog.Shared.Blogs
+@using BlazorBlog.Shared.Blogs.Commands
+@attribute [Route(Routes.Pages.Blogs.Edit)]
+<PageTitle>Edit Blog</PageTitle>
+
+<h3>Edit Blog</h3>
+
+@if (_command == null)
+{
+    <div>Loading...</div>
+}
+else
+{
+    <AddOrUpdateBlogForm Command="_command"/>
+}
+
+@code {
+    private AddOrUpdateBlogCommand? _command;
+
+    [Parameter] public Guid Id { get; set; }
+    [Inject] public HttpClient HttpClient { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var route = Routes.Api.Blogs.GetById.Format(Id);
+        var blog = await HttpClient.GetFromJsonAsync<BlogDto>(route);
+
+        if (blog == null)
+            return;
+
+        _command = blog.MapToCommand();
+    }
+
+}

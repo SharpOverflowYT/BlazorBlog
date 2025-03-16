@@ -1,0 +1,14 @@
+﻿@using BlazorBlog.Shared.Blogs.Commands
+@using BlazorBlog.Client.Pages.BlogPosts.Components
+@attribute [Route(Routes.Pages.BlogPosts.Add)]
+<PageTitle>Add Post</PageTitle>
+
+<h3>Add Post</h3>
+
+<AddOrUpdateBlogPostForm BlogId="BlogId" Command="new AddOrUpdateBlogPostCommand()"/>
+
+@code {
+
+    [Parameter] public Guid BlogId { get; set; }
+
+}

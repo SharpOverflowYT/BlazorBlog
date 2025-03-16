@@ -1,0 +1,67 @@
+﻿@using BlazorBlog.Shared.Blogs
+@attribute [Route(Routes.Pages.Blogs.Index)]
+
+<PageTitle>Blogs</PageTitle>
+
+<div class="d-flex align-items-center justify-content-between">
+    <h3>Blogs</h3>
+    <a class="btn btn-outline-primary" href="@Routes.Pages.Blogs.Add">Add Blog</a>
+</div>
+
+@if (_blogs == null)
+{
+    <div>Loading...</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+        <th>Title</th>
+        <th>Description</th>
+        <th></th>
+        </thead>
+        <tbody>
+        @foreach (var blog in _blogs)
+        {
+            <tr>
+                <td>@blog.Title</td>
+                <td>@blog.Description</td>
+                <td>
+                    <button class="btn btn-outline-primary" @onclick="@(() => GoToPostsPage(blog))">
+                        Posts
+                    </button>
+
+                    <button class="btn btn-outline-primary" @onclick="@(() => GoToEditPage(blog))">
+                        Edit
+                    </button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<BlogDto>? _blogs;
+
+    [Inject] public HttpClient HttpClient { get; set; } = null!;
+    [Inject] public NavigationManager NavigationManager { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _blogs = await HttpClient.GetFromJsonAsync<List<BlogDto>>(Routes.Api.Blogs.GetAll);
+    }
+
+    private void GoToPostsPage(BlogDto blog)
+    {
+        var route = Routes.Pages.BlogPosts.Index.Format(blog.Id);
+        NavigationManager.NavigateTo(route);
+    }
+
+    private void GoToEditPage(BlogDto blog)
+    {
+        var route = Routes.Pages.Blogs.Edit.Format(blog.Id);
+        NavigationManager.NavigateTo(route);
+    }
+
+}
