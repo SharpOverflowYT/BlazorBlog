@@ -1,0 +1,70 @@
+﻿@using BlazorBlog.Shared.Blogs
+@using Humanizer
+@attribute [Route(Routes.Pages.BlogPosts.Index)]
+
+<PageTitle>Blog Posts</PageTitle>
+
+<div class="d-flex align-items-center justify-content-between">
+    <h3>Blog Posts</h3>
+    <a class="btn btn-outline-primary" href="@Routes.Pages.BlogPosts.Add.Format(BlogId)">Add Post</a>
+</div>
+
+@if (_posts == null)
+{
+    <div>Loading...</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+        <th>Title</th>
+        <th>Created</th>
+        <th></th>
+        </thead>
+        <tbody>
+        @foreach (var post in _posts)
+        {
+            <tr>
+                <td>@post.Title</td>
+                <td>@post.CreatedAt.Humanize()</td>
+                <td>
+                    <button class="btn btn-outline-primary" @onclick="@(() => GoToViewPage(post))">
+                        View
+                    </button>
+
+                    <button class="btn btn-outline-primary" @onclick="@(() => GoToEditPage(post))">
+                        Edit
+                    </button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<BlogPostDto>? _posts;
+
+    [Parameter] public Guid BlogId { get; set; }
+
+    [Inject] public HttpClient HttpClient { get; set; } = null!;
+    [Inject] public NavigationManager NavigationManager { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _posts = await HttpClient.GetFromJsonAsync<List<BlogPostDto>>(Routes.Api.BlogPosts.GetAll.Format(BlogId));
+    }
+
+    private void GoToViewPage(BlogPostDto post)
+    {
+        var route = Routes.Pages.BlogPosts.View.Format(BlogId, post.Id);
+        NavigationManager.NavigateTo(route);
+    }
+
+    private void GoToEditPage(BlogPostDto post)
+    {
+        var route = Routes.Pages.BlogPosts.Edit.Format(BlogId, post.Id);
+        NavigationManager.NavigateTo(route);
+    }
+
+}

@@ -1,0 +1,57 @@
+﻿@using BlazorBlog.Client.Extensions
+@using BlazorBlog.Shared.Blogs
+@using BlazorBlog.Shared.Blogs.Commands
+@using BlazorBlog.Client.Pages.BlogPosts.Components
+@attribute [Route(Routes.Pages.BlogPosts.Edit)]
+<PageTitle>Edit Post</PageTitle>
+
+<div class="d-flex align-items-center justify-content-between">
+    <h3>Edit Post</h3>
+
+    <button class="btn btn-outline-danger" @onclick="DeleteAsync">
+        Delete
+    </button>
+</div>
+
+@if (_command == null)
+{
+    <div>Loading...</div>
+}
+else
+{
+    <AddOrUpdateBlogPostForm BlogId="BlogId" Command="_command"/>
+}
+
+@code {
+    private AddOrUpdateBlogPostCommand? _command;
+
+    [Parameter] public Guid BlogId { get; set; }
+    [Parameter] public Guid Id { get; set; }
+
+    [Inject] public HttpClient HttpClient { get; set; } = null!;
+    [Inject] public NavigationManager NavigationManager { get; set; } = null!;
+    [Inject] public IJSRuntime JavaScriptRuntime { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var route = Routes.Api.BlogPosts.GetById.Format(BlogId, Id);
+        var post = await HttpClient.GetFromJsonAsync<BlogPostDto>(route);
+
+        if (post == null)
+            return;
+
+        _command = post.MapToCommand();
+    }
+
+    private async Task DeleteAsync()
+    {
+        var confirmed = await JavaScriptRuntime.InvokeAsync<bool>("confirm", "Are you sure you wish to delete this post?");
+
+        if (!confirmed)
+            return;
+
+        var route = Routes.Api.BlogPosts.Delete.Format(BlogId, Id);
+        await HttpClient.DeleteAsync(route);
+        NavigationManager.NavigateTo(Routes.Pages.BlogPosts.Index.Format(BlogId));
+    }
+}

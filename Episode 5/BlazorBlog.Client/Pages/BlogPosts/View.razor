@@ -1,0 +1,43 @@
+﻿@using BlazorBlog.Shared.Blogs
+@using Humanizer
+@attribute [Route(Routes.Pages.BlogPosts.View)]
+<PageTitle>View Post</PageTitle>
+
+@if (_post == null)
+{
+    <div>Loading...</div>
+}
+else
+{
+    <h3>@_post.Title</h3>
+
+    <p>@_post.Content</p>
+
+    <div class="small text-muted mb-2">
+        <span>Posted @_post.CreatedAt.Humanize()</span>
+
+        @if (_post.CreatedAt != _post.UpdatedAt)
+        {
+            <span>, updated @_post.UpdatedAt.Humanize()</span>
+        }
+    </div>
+
+    <a class="btn btn-outline-primary" href="@Routes.Pages.BlogPosts.Index.Format(BlogId)">
+        Back to posts
+    </a>
+}
+
+@code {
+    private BlogPostDto? _post;
+
+    [Parameter] public Guid Id { get; set; }
+    [Parameter] public Guid BlogId { get; set; }
+
+    [Inject] public HttpClient HttpClient { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _post = await HttpClient.GetFromJsonAsync<BlogPostDto>(Routes.Api.BlogPosts.GetById.Format(BlogId, Id));
+    }
+
+}
